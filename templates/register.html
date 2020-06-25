@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Lazy - Bootstrap UI Kit</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="description" content="A new design system for developing with less effort.">
+    <meta name="author" content="BootstrapBay">
+
+    <link href="/static/img/favicon.ico" rel="icon" type="image/png">
+    
+    <link rel="stylesheet" href="/static/vendor/bootstrap/bootstrap.min.css">
+		<link rel="stylesheet" href="/static/css/lazy.css">
+		<link rel="stylesheet" href="/static/css/demo.css">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.0/css/all.css" integrity="sha384-aOkxzJ5uQz7WBObEZcHvV5JvRW3TUc2rNPA7pe3AwnsUohiw1Vj2Rgx2KSOkF5+h" crossorigin="anonymous">
+  </head>
+  <body class="register">
+
+    <nav class="navbar navbar-expand-md navbar-transparent navbar-light">
+    <div class="container-fluid">
+	    <div class="row">
+		    <div class="col-md-2 offset-md-1 d-flex justify-content-between">
+	        <a class="navbar-brand text-dark d-flex align-items-center" href="./"><img src="/static/img/logo.svg" alt="Example Navbar 1" height="25" class="mr-2"> Kids Kit</a>
+
+
+		    </div>
+
+	    </div>
+    </div>
+  </nav>
+<div class="container-fluid">
+  <div class="row">
+	  
+	  <div class="col-12 col-md-4 offset-md-1">
+		  
+				  <div class="register-form">
+					{% with messages = get_flashed_messages() %}
+						{% if messages %}
+							{% for msg in messages %}
+								<div class="alert alert-danger" role="alert">
+									<strong>Error!</strong> {{msg}}
+								</div>
+							{% endfor %}
+						{% endif %}
+				 	{% endwith %}
+
+
+					  <div class="mb-5">
+						  <h1>Register</h1>
+						  <p class="lead">Create an account to get started today.</p>
+					  </div>
+					  <form class="form-signin" action="" method="post">
+
+						  <div class="form-group">
+						    <label for="exampleInputEmail1">Email address</label>
+						    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" name="Email" required>
+						    <small id="emailHelp" class="form-text text-info">We'll never share your email with anyone else.</small>
+						  </div>
+
+						  <div class="form-group">
+						    <label for="exampleInputPassword1">Password</label>
+						    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" name="Password" required>
+						  </div>
+
+						  <div class="form-group">
+						    <label for="exampleInputPassword1">Password Confirmation</label>
+						    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" name="PasswordConfirm" required>
+						  </div>
+
+							<div class="custom-control custom-checkbox my-4">
+								<input type="checkbox" class="custom-control-input" name="RememberMe" id="customCheck2">
+								
+							</div>
+
+						  <button type="submit" class="btn btn-block btn-primary">Submit</button>
+						</form>
+
+						<p class="small my-4 text-center">Already have an account? <a href="/signin">Log in</a>.</p>
+		  		</div>
+	  </div>
+	  <div class="col-12 col-md-6 offset-md-1 d-flex">
+		  <div class="full-picture flex-grow-1">
+		  </div>
+	  </div>
+  </div>
+</div>
+
+    
+<footer class="footer-1 bg-light text-dark">
+	<div class="container">
+	<div class="d-flex flex-column flex-md-row justify-content-center align-items-center">
+		<center>
+			<div class="social mt-4 mt-md-0">
+			<a class="twitter btn btn-outline-primary btn-icon" href="#" target="_blank">
+			<i class="fab fa-twitter"></i>
+			<span class="sr-only">View our Twitter Profile</span>
+			</a>
+			<a class="facebook btn btn-outline-primary btn-icon" href="#" target="_blank">
+			<i class="fab fa-facebook"></i>
+			<span class="sr-only">View our Facebook Profile
+				<span>
+			</a>
+			<a class="github btn btn-outline-primary btn-icon" href="https://github.com/SadFarm1" target="_blank">
+			<i class="fab fa-github"></i>
+			<span class="sr-only">View our GitHub Profile</span>
+			</a>
+		</div>
+		</center>
+	</div>
+	<div class="copyright text-center">
+		<hr />
+		<p class="small">&copy; 2020 Aryadeep Buddha</p>
+	</div>
+	</div>
+	</footer>
+	
+
+
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="/static/vendor/jquery/jquery.min.js"></script>
+    <script src="/static/vendor/popper/popper.min.js"></script>
+    <script src="/static/vendor/bootstrap/bootstrap.min.js" ></script>
+
+    <!-- optional plugins -->
+    <script src="/static/vendor/nouislider/js/nouislider.min.js"></script>
+
+    <!--   lazy javascript -->
+    <script src="/static/js/lazy.js"></script>
+  </body>
+</html>

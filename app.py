@@ -9,11 +9,12 @@ from pymongo import MongoClient
 app = Flask(__name__)
 app.secret_key = os.getenv('APP_SECRET')
 
+find_dotenv()
 load_dotenv()
 
 cluster = MongoClient(os.getenv('MONGO_URL'))
-db = cluster['Cinematopia']
-users_collection = db['CineBoxes']
+db = cluster['Personal']
+users_collection = db['NexTech']
 
 
 @app.route('/', methods = ['GET'])
@@ -35,11 +36,21 @@ def signup():
 
         if str(password) == str(confirm_password):
             session['email'] = email
+            email = email.lower()
             session['password'] = password
             
-            post = {'Email': email, 'Password': password, 'Type': 'Teacher'}
+            try:
 
-            users_collection
+                account_exists = users_collection.find_one({'Email': email})
+                password_exists = account_exists['Password']
+            
+                flash('You already have an account!')
+                return render_template('register.html')
+            except:
+
+                post = {'Email': email, 'Password': password, 'Type': 'Teacher'}
+                users_collection.insert_one(post)
+                return redirect(url_for('profile'))
 
         else:
             flash('Your passwords do not match!')

@@ -25,56 +25,106 @@ def landing():
 
 @app.route('/signup', methods = ['GET', 'POST'])
 def signup():
-    if request.method == 'GET':
-        return render_template('register.html')
-
-    elif request.method == 'POST':
-        email = request.form.get('Email')
-        password = request.form.get('Password')
-        confirm_password = request.form.get('PasswordConfirm')
-
-
-        if str(password) == str(confirm_password):
-            session['email'] = email
-            email = email.lower()
-            session['password'] = password
-            
-            try:
-
-                account_exists = users_collection.find_one({'Email': email})
-                password_exists = account_exists['Password']
-            
-                flash('You already have an account!')
-                return render_template('register.html')
-            except:
-
-                post = {'Email': email, 'Password': password, 'Type': 'Teacher'}
-                users_collection.insert_one(post)
-                return redirect(url_for('profile'))
-
-        else:
-            flash('Your passwords do not match!')
+    if 'email' not in session:
+        if request.method == 'GET':
             return render_template('register.html')
+
+        elif request.method == 'POST':
+            email = request.form.get('Email')
+            password = request.form.get('Password')
+            confirm_password = request.form.get('PasswordConfirm')
+
+
+            if str(password) == str(confirm_password):
+
+                try:
+
+                    account_exists = users_collection.find_one({'Email': email})
+                    password_exists = account_exists['Password']
+                
+                    flash('You already have an account!')
+                    return render_template('register.html')
+                except:
+
+                    post = {'Email': email, 'Password': password, 'Type': 'Teacher'}
+                    users_collection.insert_one(post)
+                    return redirect(url_for('teacherProfile'))
+                    session['email'] = email
+                    email = email.lower()
+                    session['password'] = password
+                    
+
+            else:
+                flash('Your passwords do not match!')
+                return render_template('register.html')
+
+    else:
+        return redirect(url_for('teacherProfile'))
 
 @app.route('/signin', methods = ['GET', 'POST'])
 def signin():
-    if request.method == 'GET':
-        return render_template('signin.html')
-        
-    elif request.method == 'POST':
-        email = request.form.get('Email')
-        password = request.form.get('Password')
+    if 'email' not in session:
+        if request.method == 'GET':
+            return render_template('signin.html')
+            
+        elif request.method == 'POST':
+            email = request.form.get('Email')
+            password = request.form.get('Password')
 
-        return 'Good job'
+            try:
 
-@app.route('/profile', methods = ['GET', 'POST'])
-def profile():
-    if request.method == 'GET':
-        return render_template('profile.html')
+                account_exists = users_collection.find_one({'Email': email, 'Password': password})
+                
+                if account_exists['Type'] == 'Student':
+                    return redirect(url_for('studentprofile')) 
+                
+                session['email'] = account_exists['Email']
+                session['password'] = account_exists['Password']
 
-    elif request.method == 'POST':
-        pass
+            except:
+                flash('Incorrect Username/Password!')
+                return render_template('signin.html')
+            
+            return redirect(url_for('teacherProfile'))
+    else:
+        return redirect(url_for('teacherProfile'))
 
+@app.route('/teacherprofile', methods = ['GET', 'POST'])
+def teacherProfile():
+    if 'email' in session:
+        if request.method == 'GET':
+            teacher_account = users_collection.find_one({'Email': session['email']})
+            name = teacher_account['Name']
+            session['name'] = name
+            return render_template('teacherprofile.html', name=name)
+
+        elif request.method == 'POST':
+            pass
+    else:
+        return redirect(url_for('signin'))
+
+
+@app.route('/studentprofile', methods = ['GET', 'POST'])
+def studentProfile():
+    if 'email' in session:
+        if request.method == 'GET':
+            student_account = users_collection.find_one({'Email': session['email']})
+            teacher_name = student_account['Name']
+            student_name = student_account['Teacher']
+            session['name'] = name
+            return render_template('teacherprofile.html', name=name)
+
+        elif request.method == 'POST':
+            pass
+    else:
+        return redirect(url_for('signin'))
+
+@app.route('/logout', methods=['POST', 'GET'])
+def logout():
+    session.pop('email', None)
+    session.pop('password', None)
+    session.pop('name', None)
+    return redirect(url_for('landing'))
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port = 80, debug=True)

@@ -59,7 +59,11 @@ def signup():
                 return render_template('register.html')
 
     else:
-        return redirect(url_for('teacherProfile'))
+        if session['type'] == 'Student':
+            return redirect(url_for('studentProfile'))
+
+        else:
+            return redirect(url_for('teacherProfile'))
 
 @app.route('/signin', methods = ['GET', 'POST'])
 def signin():
@@ -74,12 +78,16 @@ def signin():
             try:
 
                 account_exists = users_collection.find_one({'Email': email, 'Password': password})
-                
-                if account_exists['Type'] == 'Student':
-                    return redirect(url_for('studentprofile')) 
-                
+                print(account_exists)
+                print(account_exists['Type'])
                 session['email'] = account_exists['Email']
                 session['password'] = account_exists['Password']
+                session['type'] = account_exists['Type']
+                print(session['email'])
+                if str(session['type']) == 'Student':
+                    return redirect(url_for('studentProfile')) 
+                
+
 
             except:
                 flash('Incorrect Username/Password!')
@@ -87,7 +95,12 @@ def signin():
             
             return redirect(url_for('teacherProfile'))
     else:
-        return redirect(url_for('teacherProfile'))
+        if session['type'] == 'Student':
+            return redirect(url_for('studentProfile'))
+
+        else:
+            return redirect(url_for('teacherProfile'))
+
 
 @app.route('/teacherprofile', methods = ['GET', 'POST'])
 def teacherProfile():
@@ -96,7 +109,7 @@ def teacherProfile():
             teacher_account = users_collection.find_one({'Email': session['email']})
             name = teacher_account['Name']
             session['name'] = name
-            return render_template('teacherprofile.html', name=name)
+            return render_template('teacherprofile.html', name=name, type=session['type'])
 
         elif request.method == 'POST':
             pass
@@ -109,21 +122,42 @@ def studentProfile():
     if 'email' in session:
         if request.method == 'GET':
             student_account = users_collection.find_one({'Email': session['email']})
-            teacher_name = student_account['Name']
-            student_name = student_account['Teacher']
-            session['name'] = name
-            return render_template('teacherprofile.html', name=name)
+            student_name = student_account['Name']
+            teacher_name = student_account['Teacher']
+            session['name'] = student_name
+            return render_template('studentprofile.html', name=student_name, teacher_name = teacher_name)
 
         elif request.method == 'POST':
             pass
     else:
         return redirect(url_for('signin'))
 
+
+@app.route('/teacherprofile/userslist', methods=['GET', 'POST'])
+def usersList():
+    if request.method == 'GET':
+        if 'email' in session and session['type'] == 'Teacher':
+            student_list = users_collection.find({'Type': 'Student', 'Teacher': session['name']})
+            student_names = []
+            student_emails = []
+            for student in student_list:
+                student_names.append(student['Name'])
+                student_emails.append(student['Email'])
+
+            lencount = len(student_emails)
+            count = range(0, lencount)
+            print(student_emails, student_names, student_list)
+            print(count) 
+
+            return render_template('userslist.html', count = len(student_emails), emails=student_emails, names=student_names)
+
+
 @app.route('/logout', methods=['POST', 'GET'])
 def logout():
     session.pop('email', None)
     session.pop('password', None)
     session.pop('name', None)
+    session.pop('type', None)
     return redirect(url_for('landing'))
 
 if __name__ == '__main__':

@@ -19,7 +19,7 @@
     <nav class="navbar navbar-expand-md navbar-dark bg-primary mb-4 fixed-top">
     <div class="container">
 
-      <a class="navbar-brand d-flex align-items-center" href="teacherprofile"><img src="/static/img/logo_white.svg" alt="Example Navbar 1" class="mr-2" height="30"> Lazy Kit</a>
+      <a class="navbar-brand d-flex align-items-center" href="/teacherprofile"><img src="/static/img/logo_white.svg" alt="Example Navbar 1" class="mr-2" height="30"> Lazy Kit</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown-3" aria-controls="navbarNavDropdown-3"
         aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -27,7 +27,7 @@
       <div class="collapse navbar-collapse mr-auto" id="navbarNavDropdown-3">
         <ul class="navbar-nav ml-auto text-center">
           <li class="nav-item">
-            <a class="nav-link" href="#">
+            <a class="nav-link" href="/teacherprofile">
               <i class="fas fa-chart-line"></i>
             </a>
           </li>
@@ -39,13 +39,11 @@
               <i class="far fa-user"></i>
             </a>
           </li>
-
           <li class="nav-item">
             <a href="/logout">
             <img style="padding-top: 0.3cm; padding-left: 0cm;"  width= "17" src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.iconsdb.com%2Ficons%2Fdownload%2Fwhite%2Flogout-512.gif&f=1&nofb=1" href="/logout">
             </a>
           </li>
-          
         </ul>
       </div>
     </div>
@@ -57,7 +55,7 @@
 	    <div class="col-12 col-md-8 d-flex flex-column align-items-center align-items-lg-start">
 		    <div class="d-flex flex-row align-items-start mt-3 mt-lg-0">
 			    <div class="name">
-		    		<h2 class="mb-0">Welcome, {{name}}!</h2>
+		    		<h2 class="mb-0">New User</h2>
 			    </div>
 		    
 		    </div>
@@ -65,51 +63,52 @@
 
 		    </div>
 		    
-		    <p class="lead text-center text-lg-left">{{type}}</p>
+
 	    </div>
     </div>
   </div>
 
   <div class="profile-tabs tab-content">
-    <div class="tab-pane fade show active" id="photos">
-				<div class="row">
-					<div class="col-12 col-md-4">
-						<div class="square" style="background-image:url('/static/img/dog-4.jpg');"></div>
-					</div>
-					<div class="col-12 col-md-4">
-						<div class="square" style="background-image:url('/static/img/dog-5.jpg');"></div>
-					</div>
-					<div class="col-12 col-md-4">
-						<div class="square" style="background-image:url('/static/img/dog-6.jpg');"></div>
-					</div>
-					<div class="col-12 col-md-4">
-						<div class="square" style="background-image:url('/static/img/dog-7.jpg');"></div>
-					</div>
-					<div class="col-12 col-md-4">
-						<div class="square" style="background-image:url('/static/img/dog-8.jpg');"></div>
-					</div>
-					<div class="col-12 col-md-4">
-						<div class="square" style="background-image:url('/static/img/dog-3.jpg');"></div>
-					</div>
-				</div>
-				<div class="d-flex justify-content-center my-5">
-					<a href="#a" class="btn btn-outline-primary btn-pill">Load More</a>
-				</div>
-    </div>
-    <div class="tab-pane fade text-center" id="saved">
 
-      <p class="lead"><span class="text-danger"><i class="far fa-frown-open"></i></span> Nothing saved yet.</p>
-    </div>
-    <div class="tab-pane fade text-center" id="tagged">
-      <p class="lead">Help people tag you.</p>
-      <a href="#a" class="btn btn-info btn-pill">Find Friends</a>
-    </div>
-  </div>
+
+
+    <form class="form-signin" action="" method="post">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for msg in messages %}
+                    <div class="alert alert-danger" role="alert">
+                        <strong>Error!</strong> {{msg}}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div class="form-group">
+            <input type="text" class="form-control" id="name" name="name" placeholder="Full Name">
+          </div>
+
+        <hr>
+
+
+        <div class="form-group">
+            <input type="email" class="form-control" name="email" id="email" placeholder="Email">
+        </div>
+
+        <hr>
+        
+        <div class="form-group">
+            <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+          </div>
+        <button type="submit" name="password" class="btn btn-block btn-primary">Submit</button>
+    </form>
+
+
+
 
 </div>
 
     
-<footer class="footer-1 bg-light text-dark">
+<footer class="footer-1 bg-light text-dark fixed-bottom">
   <div class="container">
   <div class="d-flex flex-column flex-md-row justify-content-center align-items-center">
     <center>

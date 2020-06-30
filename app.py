@@ -33,6 +33,7 @@ def signup():
             email = request.form.get('Email')
             password = request.form.get('Password')
             confirm_password = request.form.get('PasswordConfirm')
+            name = request.form.get('Name')
 
 
             if str(password) == str(confirm_password):
@@ -46,7 +47,7 @@ def signup():
                     return render_template('register.html')
                 except:
 
-                    post = {'Email': email, 'Password': password, 'Type': 'Teacher'}
+                    post = {'Email': email, 'Password': password, 'Type': 'Teacher', 'Name': name}
                     users_collection.insert_one(post)
                     return redirect(url_for('teacherProfile'))
                     session['email'] = email
@@ -72,18 +73,15 @@ def signin():
             return render_template('signin.html')
             
         elif request.method == 'POST':
-            email = request.form.get('Email')
+            email = request.form.get('Email').lower()
             password = request.form.get('Password')
 
             try:
 
                 account_exists = users_collection.find_one({'Email': email, 'Password': password})
-                print(account_exists)
-                print(account_exists['Type'])
                 session['email'] = account_exists['Email']
                 session['password'] = account_exists['Password']
                 session['type'] = account_exists['Type']
-                print(session['email'])
                 if str(session['type']) == 'Student':
                     return redirect(url_for('studentProfile')) 
                 
@@ -150,6 +148,62 @@ def usersList():
             print(count) 
 
             return render_template('userslist.html', count = len(student_emails), emails=student_emails, names=student_names)
+
+
+@app.route('/teacherprofile/userslist/<email>', methods=['GET', 'POST'])
+def usersEdit(email):
+    if request.method == 'GET':
+        student_account = users_collection.find_one({'Email': email, 'Type': 'Student'})
+        student_name = student_account['Name']
+
+        return render_template('usersedit.html', email=email, name = student_name)
+    if request.method == 'POST':
+        edited_name = request.form.get('name')
+        edited_email = request.form.get('email').lower()
+
+        if len(edited_name) > 0 and len(edited_email) > 0:
+
+            users_collection.find_one_and_update({'Email': email, 'Type': 'Student'}, {'$set' :{'Email': edited_email, 'Name': edited_name}})
+            flash('User Updated!')
+            return redirect(url_for('usersList'))
+        else:
+            flash('Please fill out both fields!')
+            student_account = users_collection.find_one({'Email': email, 'Type': 'Student'})
+            student_name = student_account['Name']
+
+            return render_template('usersedit.html', email=email, name = student_name)
+
+
+
+@app.route('/teacherprofile/userslist/newuser', methods=['GET', 'POST'])
+def newUser():
+    if request.method == 'GET':
+        return render_template('newuser.html')
+
+    if request.method == 'POST':
+        email = request.form.get('email')
+        name = request.form.get('name')
+        password = request.form.get('Password')
+
+        if len(email) > 0 and len(name) > 0 and len(password) > 0:
+
+            post = {'Email': email, 'Password': password, 'Type': 'Student', 'Name': name, 'Teacher': session['name']}
+            users_collection.insert_one(post)
+
+            flash('User Successfully Created!')
+            return redirect(url_for('usersList'))
+
+        else:
+            flash('Please fill out all fields!')
+            return render_template('newuser.html')
+
+
+@app.route('/teacherprofile/userslist/deluser/<email>')
+def delUser(email):
+    users_collection.remove({'Email': email})
+    flash('User successfully deleted!')
+    return redirect(url_for('usersList'))
+
 
 
 @app.route('/logout', methods=['POST', 'GET'])

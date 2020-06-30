@@ -27,7 +27,7 @@
       <div class="collapse navbar-collapse mr-auto" id="navbarNavDropdown-3">
         <ul class="navbar-nav ml-auto text-center">
           <li class="nav-item">
-            <a class="nav-link" href="#">
+            <a class="nav-link" href="/teacherprofile">
               <i class="fas fa-chart-line"></i>
             </a>
           </li>
@@ -37,6 +37,11 @@
           <li class="nav-item">
             <a class="nav-link" href="#">
               <i class="far fa-user"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/logout">
+            <img style="padding-top: 0.3cm; padding-left: 0cm;"  width= "17" src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.iconsdb.com%2Ficons%2Fdownload%2Fwhite%2Flogout-512.gif&f=1&nofb=1" href="/logout">
             </a>
           </li>
         </ul>
@@ -50,21 +55,34 @@
 	    <div class="col-12 col-md-8 d-flex flex-column align-items-center align-items-lg-start">
 		    <div class="d-flex flex-row align-items-start mt-3 mt-lg-0">
 			    <div class="name">
-		    		<h2 class="mb-0">Users List</h2>
-			    </div>
-		    
-		    </div>
-		    <div class="stats d-flex flex-row align-items-center align-items-lg-start text-center text-lg-left">
+            <h2 class="mb-0">Users List</h2>
+            <br>
+            <a href="/teacherprofile/userslist/newuser">
+            <button type="button" class="btn btn-primary" href="/teacherprofile/userslist/newuser">New User</button>
+            </a>
+          </div>
 
-		    </div>
-		    
 
+		    
+        </div>
 	    </div>
     </div>
   </div>
 
   <div class="profile-tabs tab-content">
-    <div class="tab-pane fade show active" id="photos">
+    <div class="tab-pane fade show active" >
+      {% with messages = get_flashed_messages() %}
+          {% if messages %}
+              {% for msg in messages %}
+                <div class="alert alert-success" role="alert">
+                  <strong>Success!</strong> {{msg}}
+                </div>
+              {% endfor %}
+          {% endif %}
+      {% endwith %}
+
+
+
         <table class = table table-hover>
             <thead>
                 <tr>
@@ -78,8 +96,18 @@
               <tr class="table-active">
                 <th scope = 'row'>{{names[number]}} </th>
                 <td>{{emails[number]}} </td>
-                <td><img width="30" href={{names[number]}}  src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Edit_icon_%28the_Noun_Project_30184%29.svg/768px-Edit_icon_%28the_Noun_Project_30184%29.svg.png"></td>
+                <td><a href=/teacherprofile/userslist/{{emails[number]}}>
+                  <img width="30"  src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Edit_icon_%28the_Noun_Project_30184%29.svg/768px-Edit_icon_%28the_Noun_Project_30184%29.svg.png">
+                </a></td>
+
+                <td>
+                  <a href="/teacherprofile/userslist/deluser/{{emails[number]}}">
+                    <button type="button" class="btn btn-danger">Delete User</button>
+                  </a>
+
+                </td>
               </tr>
+
             </tbody>
             {% endfor %}
         </table>

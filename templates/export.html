@@ -19,20 +19,15 @@
     <nav class="navbar navbar-expand-md navbar-dark bg-primary mb-4 fixed-top">
     <div class="container">
 
-      <a class="navbar-brand d-flex align-items-center" href="/studentprofile"><img src="/static/img/logo_white.svg" alt="Example Navbar 1" class="mr-2" height="30"> Lazy Kit</a>
+      <a class="navbar-brand d-flex align-items-center" href="/teacherprofile"><img src="/static/img/logo_white.svg" alt="Example Navbar 1" class="mr-2" height="30"> Lazy Kit</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown-3" aria-controls="navbarNavDropdown-3"
         aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse mr-auto" id="navbarNavDropdown-3">
         <ul class="navbar-nav ml-auto text-center">
-
-
-
           <li class="nav-item">
-            <a href="/logout">
-            <img style="padding-top: 0.3cm; padding-left: 0cm;"  width= "17" src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.iconsdb.com%2Ficons%2Fdownload%2Fwhite%2Flogout-512.gif&f=1&nofb=1" href="/logout">
-            </a>
+            <h1 style="color:white;">Exported on 7/1/2020</h1>
           </li>
         </ul>
       </div>
@@ -42,49 +37,89 @@
   <div class="info">
     <div class="row">
 
-
-	    <div class="col-12 col-md-7 d-flex flex-column align-items-center align-items-lg-start">
+	    <div class="col-12 col-md-8 d-flex flex-column align-items-center align-items-lg-start">
 		    <div class="d-flex flex-row align-items-start mt-3 mt-lg-0">
-            
-
 			    <div class="name">
-        {% with messages = get_flashed_messages() %}
-          {% if messages %}
-            {% for msg in messages %}
-              <div class="alert alert-success" role="alert">
-                <strong>Success!</strong> {{msg}}
-              </div>
-            {% endfor %}
-          {% endif %}
-        {% endwith %}
-		    		<h2 class="mb-0">Welcome, {{name}}!</h2>
-			    </div>
-		    
-		    </div>
-		    <div class="stats d-flex flex-row align-items-center align-items-lg-start text-center text-lg-left">
+            <h2 class="mb-0">Exported Information For Bob Newbie</h2>
 
-		    </div>
-		    
-        <p class="lead text-center text-lg-left">Student</p>
-        <p class="text-muted text-center text-lg-left">Teacher: {{teacher_name}}</p>
-        <div class="col-3 col-md-7 d-flex flex-column align-items-center">
-          <hr>
-          <a href="/studentprofile/question/1">
-          <button type="button" class="btn btn-secondary btn-lg">Take The Test</button>
-          </a>
-        </div>        
-      </div>
-      
 
+          </div>
+
+
+
+		    
+        </div>
+	    </div>
     </div>
   </div>
 
+  <div class="profile-tabs tab-content">
+    <div class="tab-pane fade show active" >
 
+
+
+
+        <table class = table table-hover>
+            <thead>
+                <tr>
+                    <th scope ="col">Name</th>
+                    <th scope ="col">Email</th>
+                    
+                    <th scope ="col">Date</th>
+                    <th scope ="col">Questions</th>
+                    <th scope ="col">Percentage</th>
+                    
+              
+                </tr>
+
+            </thead>
+
+            <tbody>
+                <tr class="table-active">
+                <td scope="row">Bob Newbie</th>
+                <td scope="row">lol@gmail.com</th>
+                <td scope="row">7/1/2020</th>
+                
+                <td scope="row" >
+                    
+                    <table class = table table-hover>
+                        <thead>
+                            <tr>
+                                <th scope ="col">Questions</th>
+                                <th scope ="col">Answers</th>
+                          
+                            </tr>
+            
+                        </thead>
+                        <tbody>
+                            <tr class="table-active">
+                            <td scope="row">Trouble concentrating on things, such as reading the newspaper or watching television</td>  
+                            <td scope="row">Not at All</td>
+                        </tbody>
+
+
+                    </table>
+                    
+
+                </td>
+
+                <td scope="row">99%</th>
+            </tbody>
+
+            
+            <tbody>
+                
+            </tbody>
+            
+        </table>
+    </div>
+
+  </div>
 
 </div>
 
     
-<footer class="footer-1 fixed-bottom bg-light text-dark">
+<footer class="footer-1 bg-light text-dark ">
   <div class="container">
   <div class="d-flex flex-column flex-md-row justify-content-center align-items-center">
     <center>

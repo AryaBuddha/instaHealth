@@ -68,6 +68,7 @@ def signup():
         else:
             return redirect(url_for('teacherProfile'))
 
+
 @app.route('/signin', methods = ['GET', 'POST'])
 def signin():
     if 'email' not in session:
@@ -109,7 +110,23 @@ def teacherProfile():
             teacher_account = users_collection.find_one({'Email': session['email']})
             name = teacher_account['Name']
             session['name'] = name
-            return render_template('teacherprofile.html', name=name, type=session['type'])
+
+            tests_names = []
+            tests_percentages = []
+            tests_dates = []
+            
+            tests_taken = users_collection.find({'Type': 'Answers', 'Teacher': str(session['name'])})
+
+            for test in tests_taken:
+                tests_names.append(test['Name'])
+                tests_dates.append(test['Date'])
+                tests_percentages.append(test['Percentage'])
+
+            count = len(tests_names)
+
+            return render_template('teacherprofile.html', name=name, type=session['type'], count= count, names=tests_names, percentages=tests_percentages, dates = tests_dates)
+
+
 
         elif request.method == 'POST':
             pass
@@ -125,6 +142,7 @@ def studentProfile():
             student_name = student_account['Name']
             teacher_name = student_account['Teacher']
             session['name'] = student_name
+            session['teacher'] = teacher_name
 
 
 
@@ -166,8 +184,15 @@ def usersEdit(email):
         edited_email = request.form.get('email').lower()
 
         if len(edited_name) > 0 and len(edited_email) > 0:
+            old_account = users_collection.find_one({'Email': email, 'Type': 'Student'})
+            old_name = old_account['Name']
+            print(old_name)
 
             users_collection.find_one_and_update({'Email': email, 'Type': 'Student'}, {'$set' :{'Email': edited_email, 'Name': edited_name}})
+
+            
+            users_collection.update_many({'Name': str(old_name), 'Type': 'Answers'}, {'$set':{'Name': edited_name}})
+
             flash('User Updated!')
             return redirect(url_for('usersList'))
         else:
@@ -187,9 +212,15 @@ def newUser():
     if request.method == 'POST':
         email = request.form.get('email')
         name = request.form.get('name')
-        password = request.form.get('Password')
+        password = request.form.get('password')
 
-        if email is not None and name is not None and password is not None:
+
+
+        print(email, 'EMAIL')
+        print(name, 'NAME')
+        print(password, 'PASSWORD')
+
+        if len(email) > 0 and len(name) > 0 and len(password) > 0 :
 
             post = {'Email': email, 'Password': password, 'Type': 'Student', 'Name': name, 'Teacher': session['name']}
             users_collection.insert_one(post)
@@ -208,9 +239,9 @@ def delUser(email):
     flash('User successfully deleted!')
     return redirect(url_for('usersList'))
 
+
+
 question = ''
-
-
 @app.route('/studentprofile/question/<question_number>', methods=['GET', 'POST'])
 def quiz(question_number):
 
@@ -242,7 +273,7 @@ def quiz(question_number):
         if question_number == 1:
             users_collection.remove({'Date': current_date, 'Name': session['name'], 'Type': 'Answers'})
 
-            post = {'Type': 'Answers', 'Name': session['name'], 'Questions': [question], 'Answers': [answer_choice], 'Date': current_date}
+            post = {'Type': 'Answers', 'Name': session['name'], 'Questions': [question], 'Answers': [answer_choice], 'Date': current_date, 'Teacher': str(session['teacher'])}
             users_collection.insert_one(post)
         elif question_number == 5:
             student_answers = users_collection.find_one({'Type': 'Answers', 'Name': session['name'], 'Date': current_date})
@@ -252,7 +283,20 @@ def quiz(question_number):
             previous_questions.append(question)
             previous_answers.append(answer_choice)
 
-            users_collection.find_one_and_update({'Type': 'Answers', 'Name': session['name'], 'Date': current_date}, {'$set' :{'Questions': previous_questions, 'Answers': previous_answers}})
+        
+
+                
+            total_points = 0
+            for choice in previous_answers:
+                total_points += int(choice)
+
+                percentage = total_points / 20
+                percentage = percentage * 100
+
+                
+    
+
+            users_collection.find_one_and_update({'Type': 'Answers', 'Name': session['name'], 'Date': current_date}, {'$set' :{'Questions': previous_questions, 'Answers': previous_answers, 'Percentage': percentage}})
 
             flash('Test submitted!')
             return redirect(url_for('studentProfile'))            
@@ -265,14 +309,20 @@ def quiz(question_number):
             previous_questions.append(question)
             previous_answers.append(answer_choice)
 
+
+
             users_collection.find_one_and_update({'Type': 'Answers', 'Name': session['name'], 'Date': current_date}, {'$set' :{'Questions': previous_questions, 'Answers': previous_answers}})
-        
+
+
 
         question_number += 1
         return redirect(f'/studentprofile/question/{question_number}')
 
 
-
+@app.route('/teacherprofile/export', methods=['GET'])
+def exportList():
+    if request.method == 'GET':
+        return render_template('export.html')
 
     
 @app.route('/logout', methods=['POST', 'GET'])
@@ -281,6 +331,7 @@ def logout():
     session.pop('password', None)
     session.pop('name', None)
     session.pop('type', None)
+    session.pop('teacher', None)
     return redirect(url_for('landing'))    
 
 

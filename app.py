@@ -1,4 +1,4 @@
-from flask import Flask, redirect, url_for, render_template, request, session, flash
+from flask import Flask, redirect, url_for, render_template, request, session, flash, make_response
 import requests
 import os
 import dotenv
@@ -7,6 +7,7 @@ import pymongo
 from pymongo import MongoClient
 import random
 import datetime
+import pdfkit
 
 app = Flask(__name__)
 app.secret_key = os.getenv('APP_SECRET')
@@ -319,10 +320,53 @@ def quiz(question_number):
         return redirect(f'/studentprofile/question/{question_number}')
 
 
-@app.route('/teacherprofile/export', methods=['GET'])
-def exportList():
+@app.route('/teacherprofile/export/<email>', methods=['GET'])
+def exportList(email):
     if request.method == 'GET':
-        return render_template('export.html')
+        student = users_collection.find_one({'Type': 'Student', 'Email': email, 'Teacher': session['name']})
+
+        student_name = student['Name']
+        current_date = datetime.datetime.today().strftime ('%m/%d/%Y')
+
+        student_answers = users_collection.find({'Type': 'Answers', 'Name': student_name})
+
+        dates = []
+        questions = []
+        answers = []
+        percentages = []
+        answers_text = []
+
+        for quiz in student_answers:
+            dates.append(quiz['Date'])
+            questions = quiz['Questions']
+            answers = quiz['Answers']
+            percentages.append(quiz['Percentage'])
+
+
+        for choice in answers:
+            if choice == '1':
+                answers_text.append('Not at All')
+            elif choice == '2':
+                answers_text.append('Serveral Days')
+            elif choice == '3':
+                answers_text.append('More than half the days')
+            elif choice == '4':
+                answers_text.append('Nearly Every Day')
+
+        
+        count = len(dates)
+
+        rendered = render_template('export.html', name=student_name, current_date=current_date, dates=dates, questions=questions, answers=answers_text, percentages=percentages, count=count)
+
+        pdf = pdfkit.from_string(rendered, False)
+
+        
+        response = make_response(pdf)
+        response.headers['Content-Type'] = 'application/pdf'
+        response.headers['Content-Disposition'] = f'attachment; filename=Exported{student_name}.pdf'
+
+        return response
+
 
     
 @app.route('/logout', methods=['POST', 'GET'])

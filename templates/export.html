@@ -27,7 +27,7 @@
       <div class="collapse navbar-collapse mr-auto" id="navbarNavDropdown-3">
         <ul class="navbar-nav ml-auto text-center">
           <li class="nav-item">
-            <h1 style="color:white;">Exported on 7/1/2020</h1>
+            <h1 style="color:white;">Exported on {{current_date}}</h1>
           </li>
         </ul>
       </div>
@@ -40,7 +40,7 @@
 	    <div class="col-12 col-md-8 d-flex flex-column align-items-center align-items-lg-start">
 		    <div class="d-flex flex-row align-items-start mt-3 mt-lg-0">
 			    <div class="name">
-            <h2 class="mb-0">Exported Information For Bob Newbie</h2>
+            <h2 class="mb-0">Exported Information For {{name}}</h2>
 
 
           </div>
@@ -62,54 +62,56 @@
         <table class = table table-hover>
             <thead>
                 <tr>
-                    <th scope ="col">Name</th>
-                    <th scope ="col">Email</th>
+
                     
                     <th scope ="col">Date</th>
-                    <th scope ="col">Questions</th>
-                    <th scope ="col">Percentage</th>
+                    <th scope ="col">Data</th>
+                    <th scope ="col">Percentage of Risk</th>
                     
               
                 </tr>
 
             </thead>
-
-            <tbody>
-                <tr class="table-active">
-                <td scope="row">Bob Newbie</th>
-                <td scope="row">lol@gmail.com</th>
-                <td scope="row">7/1/2020</th>
-                
-                <td scope="row" >
-                    
-                    <table class = table table-hover>
-                        <thead>
-                            <tr>
-                                <th scope ="col">Questions</th>
-                                <th scope ="col">Answers</th>
-                          
-                            </tr>
             
-                        </thead>
-                        <tbody>
-                            <tr class="table-active">
-                            <td scope="row">Trouble concentrating on things, such as reading the newspaper or watching television</td>  
-                            <td scope="row">Not at All</td>
-                        </tbody>
 
+            {% for number in range(0,count) %}
+              <tbody>
+                  <tr class="table-active">
 
-                    </table>
-                    
+                  <td scope="row">{{dates[number]}}</th>
+                  
+                  <td scope="row" >
+                      
+                      <table class = table table-hover>
+                          <thead>
+                              <tr>
+                                  <th scope ="col">Questions</th>
+                                  <th scope ="col">Answers</th>
+                            
+                              </tr>
+              
+                          </thead>
 
-                </td>
+                          {% for qnum in range(0,5) %}
+                            <tbody>
+                                <tr class="table-active">
+                                <td scope="row">{{questions[qnum]}}</td>  
+                                <td scope="row">{{answers[qnum]}}</td>
+                            </tbody>
 
-                <td scope="row">99%</th>
-            </tbody>
+                          {% endfor %}
+                      </table>
+                      
 
-            
-            <tbody>
-                
-            </tbody>
+                  </td>
+
+                  <td scope="row">{{percentages[number]}}%</th>
+              </tbody>
+              {% endfor %}
+              
+              <tbody>
+                  
+              </tbody>
             
         </table>
     </div>
@@ -119,32 +121,14 @@
 </div>
 
     
-<footer class="footer-1 bg-light text-dark ">
-  <div class="container">
-  <div class="d-flex flex-column flex-md-row justify-content-center align-items-center">
-    <center>
-      <div class="social mt-4 mt-md-0">
-      <a class="twitter btn btn-outline-primary btn-icon" href="#" target="_blank">
-      <i class="fab fa-twitter"></i>
-      <span class="sr-only">View our Twitter Profile</span>
-      </a>
-      <a class="facebook btn btn-outline-primary btn-icon" href="#" target="_blank">
-      <i class="fab fa-facebook"></i>
-      <span class="sr-only">View our Facebook Profile
-        <span>
-      </a>
-      <a class="github btn btn-outline-primary btn-icon" href="https://github.com/SadFarm1" target="_blank">
-      <i class="fab fa-github"></i>
-      <span class="sr-only">View our GitHub Profile</span>
-      </a>
-    </div>
-    </center>
-  </div>
+<footer class="footer-1  bg-light text-dark ">
+  
+ 
   <div class="copyright text-center">
-    <hr />
+
     <p class="small">&copy; 2020 Aryadeep Buddha</p>
   </div>
-  </div>
+
   </footer>
   
 

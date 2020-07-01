@@ -19,26 +19,16 @@
     <nav class="navbar navbar-expand-md navbar-dark bg-primary mb-4 fixed-top">
     <div class="container">
 
-      <a class="navbar-brand d-flex align-items-center" href="/teacherprofile"><img src="/static/img/logo_white.svg" alt="Example Navbar 1" class="mr-2" height="30"> Lazy Kit</a>
+      <a class="navbar-brand d-flex align-items-center" href="/studentprofile"><img src="/static/img/logo_white.svg" alt="Example Navbar 1" class="mr-2" height="30"> Lazy Kit</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown-3" aria-controls="navbarNavDropdown-3"
         aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse mr-auto" id="navbarNavDropdown-3">
         <ul class="navbar-nav ml-auto text-center">
-          <li class="nav-item">
-            <a class="nav-link" href="/teacherprofile">
-              <i class="fas fa-chart-line"></i>
-            </a>
-          </li>
 
 
 
-          <li class="nav-item">
-            <a class="nav-link" href="/teacherprofile/userslist">
-              <i class="far fa-user"></i>
-            </a>
-          </li>
           <li class="nav-item">
             <a href="/logout">
             <img style="padding-top: 0.3cm; padding-left: 0cm;"  width= "17" src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.iconsdb.com%2Ficons%2Fdownload%2Fwhite%2Flogout-512.gif&f=1&nofb=1" href="/logout">
@@ -51,65 +41,74 @@
 <div class="container">
   <div class="info">
     <div class="row">
+        <div class="col-12 col-md-2 text-center">
+		    
+	    </div>
 
 	    <div class="col-12 col-md-8 d-flex flex-column align-items-center align-items-lg-start">
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            {% for msg in messages %}
+              <div class="alert alert-danger" role="alert">
+                <strong>Error!</strong> {{msg}}
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
 		    <div class="d-flex flex-row align-items-start mt-3 mt-lg-0">
 			    <div class="name">
-		    		<h2 class="mb-0">Edit User</h2>
+
+                    <p class="lead">{{question_title}}</p>
+                    <h2 class="mb-0">{{question}}</h2>
+                    
+                    <br>
+
+                    <form class="form-signin" action="" method="post">
+                      <div class="form-group">
+                        <div class="custom-control custom-radio my-2">
+                          <input type="radio" id="customRadio1" name="response" value="choice1" class="custom-control-input">
+                          <label class="custom-control-label" for="customRadio1">Not at all</label>
+                        </div>
+                        <div class="custom-control custom-radio my-2">
+                          <input type="radio" id="customRadio2" name="response" value="choice2" class="custom-control-input">
+                          <label class="custom-control-label" for="customRadio2">Several Days</label>
+                        </div>
+                        <div class="custom-control custom-radio my-2">
+                          <input type="radio" id="customRadio3" name="response" value="choice3" class="custom-control-input">
+                          <label class="custom-control-label" for="customRadio3">More than half the days</label>
+                        </div>
+                        <div class="custom-control custom-radio my-2">
+                          <input type="radio" id="customRadio4" name="response" value="choice4" class="custom-control-input">
+                          <label class="custom-control-label" for="customRadio4">Nearly Every Day</label>
+                        </div>     
+                        <br>                 
+                        <div class="col-md-8 col-12">
+                          <button type="submit" class="btn btn-block btn-primary">Next</button> 
+                        </div>		  
+                       
+
+                      </form>               
+                      
+                    </div>
+
+
 			    </div>
-		    
+  
 		    </div>
-		    <div class="stats d-flex flex-row align-items-center align-items-lg-start text-center text-lg-left">
 
-		    </div>
-		    
 
-	    </div>
+      </div>
+      
+
     </div>
   </div>
-
-  <div class="profile-tabs tab-content">
-
-
-
-    <form class="form-signin" action="" method="post">
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                {% for msg in messages %}
-                    <div class="alert alert-danger" role="alert">
-                        <strong>Error!</strong> {{msg}}
-                    </div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
-        <div class="input-group">
-            <div class="input-group-prepend">
-            <span class="input-group-text" id="basic-addon1"><i class="fas fa-user"></i></span>
-            </div>
-            <input type="text" class="form-control" placeholder="Name" value="{{name}}" aria-label="Username" name=name aria-describedby="basic-addon1" >
-        </div>
-
-        <hr>
-
-        <div class="form-group">
-            <input type="email" class="form-control" name="email" id="email" placeholder="email" value="{{email}}">
-        </div>
-        <button type="submit" name="password" class="btn btn-block btn-primary">Submit</button>
-
-        <br>
-        
-        <a href='/teacherprofile/userslist'>
-          <button type="button" class="btn btn-dark">Cancel</button>
-        </a>
-    </form>
-
 
 
 
 </div>
 
     
-<footer class="footer-1 bg-light text-dark fixed-bottom">
+<footer class="footer-1 fixed-bottom bg-light text-dark">
   <div class="container">
   <div class="d-flex flex-column flex-md-row justify-content-center align-items-center">
     <center>

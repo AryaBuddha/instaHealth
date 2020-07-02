@@ -291,6 +291,7 @@ def quiz(question_number):
 
                 post = {'Type': 'Answers', 'Name': session['name'], 'Questions': [question], 'Answers': [answer_choice], 'Date': current_date, 'Teacher': str(session['teacher'])}
                 users_collection.insert_one(post)
+
             elif question_number == 5:
                 student_answers = users_collection.find_one({'Type': 'Answers', 'Name': session['name'], 'Date': current_date})
                 previous_questions = student_answers['Questions']
@@ -298,10 +299,7 @@ def quiz(question_number):
 
                 previous_questions.append(question)
                 previous_answers.append(answer_choice)
-
-            
-
-                    
+       
                 total_points = 0
                 for choice in previous_answers:
                     total_points += int(choice)
@@ -309,8 +307,7 @@ def quiz(question_number):
                     percentage = total_points / 20
                     percentage = percentage * 100
 
-                    
-        
+                    percentage = round(percentage)
 
                 users_collection.find_one_and_update({'Type': 'Answers', 'Name': session['name'], 'Date': current_date}, {'$set' :{'Questions': previous_questions, 'Answers': previous_answers, 'Percentage': percentage}})
 

@@ -7,7 +7,6 @@ import pymongo
 from pymongo import MongoClient
 import random
 import datetime
-import pdfkit
 
 app = Flask(__name__)
 app.secret_key = os.getenv('APP_SECRET')
@@ -37,7 +36,8 @@ def signup():
             password = request.form.get('Password')
             confirm_password = request.form.get('PasswordConfirm')
             name = request.form.get('Name')
-
+            
+            print(password)
 
             if str(password) == str(confirm_password):
 
@@ -50,7 +50,7 @@ def signup():
                     return render_template('register.html')
                 except:
 
-                    post = {'Email': email, 'Password': password, 'Type': 'Teacher', 'Name': name}
+                    post = {'Email': email.lower(), 'Password': password, 'Type': 'Teacher', 'Name': name}
                     users_collection.insert_one(post)
                     return redirect(url_for('teacherProfile'))
                     session['email'] = email
@@ -223,7 +223,7 @@ def newUser():
 
         if len(email) > 0 and len(name) > 0 and len(password) > 0 :
 
-            post = {'Email': email, 'Password': password, 'Type': 'Student', 'Name': name, 'Teacher': session['name']}
+            post = {'Email': email.lower(), 'Password': password, 'Type': 'Student', 'Name': name, 'Teacher': session['name']}
             users_collection.insert_one(post)
 
             flash('User Successfully Created!')
@@ -236,7 +236,12 @@ def newUser():
 
 @app.route('/teacherprofile/userslist/deluser/<email>')
 def delUser(email):
+    old_account = users_collection.find_one({'Email': email})
+    name = old_account['Name']
     users_collection.remove({'Email': email})
+
+    users_collection.delete_many({'Name': name, 'Teacher': session['name'], 'Type': 'Answers'})
+
     flash('User successfully deleted!')
     return redirect(url_for('usersList'))
 
@@ -356,16 +361,7 @@ def exportList(email):
         
         count = len(dates)
 
-        rendered = render_template('export.html', name=student_name, current_date=current_date, dates=dates, questions=questions, answers=answers_text, percentages=percentages, count=count)
-
-        pdf = pdfkit.from_string(rendered, False)
-
-        
-        response = make_response(pdf)
-        response.headers['Content-Type'] = 'application/pdf'
-        response.headers['Content-Disposition'] = f'attachment; filename=Exported{student_name}.pdf'
-
-        return response
+        return render_template('export.html', name=student_name, current_date=current_date, dates=dates, questions=questions, answers=answers_text, percentages=percentages, count=count)
 
 
     

@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Lazy - Bootstrap UI Kit</title>
+    <title>instaHealth</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="description" content="A new design system for developing with less effort.">
@@ -19,7 +19,7 @@
     <nav class="navbar navbar-expand-md navbar-dark bg-primary mb-4 fixed-top">
     <div class="container">
 
-      <a class="navbar-brand d-flex align-items-center" href="/teacherprofile"><img src="/static/img/logo_white.svg" alt="Example Navbar 1" class="mr-2" height="30"> Lazy Kit</a>
+      <a class="navbar-brand d-flex align-items-center" href="/teacherprofile"><img src="/static/img/logo_white.svg" alt="Example Navbar 1" class="mr-2" height="30"> instaHealth</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown-3" aria-controls="navbarNavDropdown-3"
         aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -27,7 +27,22 @@
       <div class="collapse navbar-collapse mr-auto" id="navbarNavDropdown-3">
         <ul class="navbar-nav ml-auto text-center">
           <li class="nav-item">
-            <h1 style="color:white;">Exported on {{current_date}}</h1>
+            <a class="nav-link" href="/teacherprofile">
+              <i class="fas fa-chart-line"></i>
+            </a>
+          </li>
+
+
+
+          <li class="nav-item">
+            <a class="nav-link" href="/teacherprofile/userslist">
+              <i class="far fa-user"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/logout">
+            <img style="padding-top: 0.3cm; padding-left: 0cm;"  width= "17" src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.iconsdb.com%2Ficons%2Fdownload%2Fwhite%2Flogout-512.gif&f=1&nofb=1" href="/logout">
+            </a>
           </li>
         </ul>
       </div>
@@ -40,7 +55,7 @@
 	    <div class="col-12 col-md-8 d-flex flex-column align-items-center align-items-lg-start">
 		    <div class="d-flex flex-row align-items-start mt-3 mt-lg-0">
 			    <div class="name">
-            <h2 class="mb-0">Exported Information For {{name}}</h2>
+            <h2 class="mb-0">More Information For {{name}}</h2>
 
 
           </div>

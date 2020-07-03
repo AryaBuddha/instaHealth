@@ -230,7 +230,7 @@ def newUser():
                 post = {'Email': email.lower(), 'Password': password, 'Type': 'Student', 'Name': name, 'Teacher': session['name']}
                 users_collection.insert_one(post)
 
-                flash('User Successfully Created!')
+                flash('Student Successfully Created!')
                 return redirect(url_for('usersList'))
 
             else:

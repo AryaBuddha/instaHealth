@@ -115,8 +115,9 @@ def teacherProfile():
             tests_names = []
             tests_percentages = []
             tests_dates = []
-            
-            tests_taken = users_collection.find({'Type': 'Answers', 'Teacher': str(session['name'])})
+
+            current_date = datetime.datetime.today().strftime ('%m/%d/%Y')
+            tests_taken = users_collection.find({'Type': 'Answers', 'Date': current_date,  'Teacher': str(session['name'])})
 
             for test in tests_taken:
                 tests_names.append(test['Name'])

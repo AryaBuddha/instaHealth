@@ -200,7 +200,7 @@ def usersEdit(email):
                 
                 users_collection.update_many({'Name': str(old_name), 'Type': 'Answers'}, {'$set':{'Name': edited_name}})
 
-                flash('User Updated!')
+                flash('Student Updated!')
                 return redirect(url_for('usersList'))
             else:
                 flash('Please fill out both fields!')
@@ -256,7 +256,7 @@ def delUser(email):
 
         users_collection.delete_many({'Name': name, 'Teacher': session['name'], 'Type': 'Answers'})
 
-        flash('User successfully deleted!')
+        flash('Student successfully deleted!')
         return redirect(url_for('usersList'))
     else:
         return redirect(url_for('logout'))

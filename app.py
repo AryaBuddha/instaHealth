@@ -145,9 +145,10 @@ def studentProfile():
             session['name'] = student_name
             session['teacher'] = teacher_name
 
+            last_date = users_collection.find_one({'Email': session['email'], 'Type': 'LastDate'})
 
 
-            return render_template('studentprofile.html', name=student_name, teacher_name = teacher_name)
+            return render_template('studentprofile.html', name=student_name, teacher_name = teacher_name, last_date = last_date['Date'])
 
         elif request.method == 'POST':
             pass
@@ -230,6 +231,10 @@ def newUser():
                 post = {'Email': email.lower(), 'Password': password, 'Type': 'Student', 'Name': name, 'Teacher': session['name']}
                 users_collection.insert_one(post)
 
+                post = {'Email': email.lower(), 'Type': 'LastDate', 'Name': name, 'Date': 'Never'}
+                users_collection.insert_one(post)
+                
+
                 flash('Student Successfully Created!')
                 return redirect(url_for('usersList'))
 
@@ -296,6 +301,8 @@ def quiz(question_number):
                 student_answers = users_collection.find_one({'Type': 'Answers', 'Name': session['name'], 'Date': current_date})
                 previous_questions = student_answers['Questions']
                 previous_answers = student_answers['Answers']
+
+                users_collection.find_one_and_update({'Email': session['email'], 'Type': 'LastDate'}, {'$set' :{'Date': current_date}})
 
                 previous_questions.append(question)
                 previous_answers.append(answer_choice)
@@ -377,7 +384,10 @@ def exportList(email):
     else:
         return redirect(url_for('logout'))            
 
+@app.errorhandler(404)
+def internal_error(error):
 
+    return '<p> Something goofed! Go back to normal </p> <a href="/signin">here</a>'
     
 @app.route('/logout', methods=['POST', 'GET'])
 def logout():

@@ -6,15 +6,25 @@
 
 
 ## Live site avaliable [here](https://instahealth.cf/)
+### Credentials to login on live website
+```
+Teacher account:
+anac@gmail.com 
+ACC1999
+```
+```
+Student Account:
+jandrews@gmail.com
+JAND1999
+```
+Feel free to make new student/teacher accounts!
 
 
 
 
 
 
-
-
-
+-------------------------
 
 
 
